@@ -1,24 +1,25 @@
 package com.loctalk;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import com.loctalk.R;
 import navigation.NavDrawerItem;
 import navigation.NavDrawerListAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -51,7 +52,7 @@ public class MainActivity extends ActionBarActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+		getBroadcastAddress();
 		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		System.out.println("Layout ke baad wala");
@@ -306,7 +307,25 @@ public class MainActivity extends ActionBarActivity{
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	void getBroadcastAddress() {
+	    WifiManager wifi = (WifiManager) super.getSystemService(Context.WIFI_SERVICE);
+	    DhcpInfo dhcp = wifi.getDhcpInfo();
+	    // handle null somehow
 
+	    int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+	    byte[] quads = new byte[4];
+	    for (int k = 0; k < 4; k++)
+	      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+	    String s;
+		try {
+			s = InetAddress.getByAddress(quads).toString();
+			System.out.println("Extracted IP!!!!=====>"+s);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	}
 
 	private final Handler mHandler = new Handler() {
 	    @Override
