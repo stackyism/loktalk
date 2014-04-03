@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +29,7 @@ import android.widget.ListView;
 
 
 public class MainActivity extends ActionBarActivity{
+	dataTransferInterface datatofragment;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -42,7 +45,7 @@ public class MainActivity extends ActionBarActivity{
 
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
-	
+	receiver receiverthread;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +116,9 @@ public class MainActivity extends ActionBarActivity{
 			// on first time display view for first nav item
 			displayView(0);
 		}
+		receiverthread=new receiver(mHandler);
+		receiverthread.start();
+		
 	}
 
 	/**
@@ -164,9 +170,9 @@ public class MainActivity extends ActionBarActivity{
 	 * Diplaying fragment view for selected nav drawer list item
 	 * */
 	String frag;
-	static ListFragment listfragment = null;
-	static ListFragment listfragment2 = null;
-	static ListFragment listFragment3 = null;
+	ListFragment listfragment = null;
+	ListFragment listfragment2 = null;
+	ListFragment listFragment3 = null;
 	int selected;
 	static Fragment fragment = null;
 	private void displayView(int position) {
@@ -177,7 +183,7 @@ public class MainActivity extends ActionBarActivity{
 		switch (position) {
 		case 0:
 			if(listfragment == null){
-				listfragment = new HomeFragment();
+				listfragment = new groupFragment();
 				selected=0;
 			}
 			else
@@ -187,7 +193,7 @@ public class MainActivity extends ActionBarActivity{
 			
 			break;
 		case 1:
-			if(listfragment2 == null){
+			/*if(listfragment2 == null){
 				listfragment2 = new HomeFragment2();
 				selected=1;
 			}
@@ -195,7 +201,7 @@ public class MainActivity extends ActionBarActivity{
 			{
 				selected=1;
 			}
-			break;
+			break;*/
 		case 2:
 			/*if(listFragment3 == null){
 				listFragment3 = new PeersFragment();
@@ -302,9 +308,13 @@ public class MainActivity extends ActionBarActivity{
 
 
 
-
-		
-		
+	private final Handler mHandler = new Handler() {
+	    @Override
+	    public void handleMessage(Message msg) {
+	    	System.out.println("message"+ msg.obj);
+	    	datatofragment.passdatatofragment(msg.toString());
+	    }
+	};
 		
 		
 	}
