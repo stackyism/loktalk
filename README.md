@@ -1,4 +1,4 @@
 loktalk
 =======
 
-Our SEN Project
+Our SEN Project an android application
