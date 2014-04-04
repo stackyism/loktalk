@@ -316,6 +316,39 @@ public class MainActivity extends ActionBarActivity{
 	    }
 	};
 		
+	
+	/*
+	 * try {
+				String parsedstr[] = js1.parseUltiJSON(strjs);
+				
+				if(parsedstr[3].equals("Yeh msg hai"))  
+					datatofragment.passdatatofragment(msg.toString());
+					
+				else if(parsedstr[3].equals("adDbReq")){
+					String tosend = js1.createUltiJSON(ps1.getAppID(), ps1.getNick(), as1.getAd(), "adDbReply");
+					//send this string
+					senMain= new sender(tosend,broad); //import broadcastIP from constant class.
+					senMain.start();
+				}
+				
+				else if(parsedstr[3].equals("adDbreply")){
+					datatoadsfragment.passdatatofragment(msg.toString());
+				}
+				
+				else if(parsedstr[3].equals("peer")){
+					//for peer
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    	
+	    }
+	};
+
+	 * 
+	 */
 		
 	}
 	
