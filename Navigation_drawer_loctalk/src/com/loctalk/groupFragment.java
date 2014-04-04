@@ -4,6 +4,8 @@ import static com.loctalk.Constant.db;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,6 +19,9 @@ import com.loctalk.database.AppDB;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -40,7 +45,7 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 	Boolean chose= false,data = false;
 	static Random rand = new Random();	
 	static String sender = "Paliwal";
-	String broad = "192.168.0.255" ;
+	String broad = getBroadcastAddress() ;
 	//MyReceiver myReceiver;
 	static int counter =0;
 	//Yeh aya hamare wale se...
@@ -69,7 +74,28 @@ public class groupFragment extends ListFragment implements dataTransferInterface
         return rootView;
     }
 	
-	
+	String getBroadcastAddress() {
+		try {
+	    WifiManager wifi = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+	    DhcpInfo dhcp = wifi.getDhcpInfo();
+	    // handle null somehow
+
+	    int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+	    byte[] quads = new byte[4];
+	    for (int k = 0; k < 4; k++)
+	      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+	    String s;
+		
+			s = InetAddress.getByAddress(quads).toString();
+			
+		} catch (Exception e) {
+			System.out.println("Error in getBroadcastAddress====>"+e);
+		
+		}
+		
+		//please insert a check if wifi is not on or it is not able to get the host string
+		return s;
+	}
 	
 	public String getID(){
 		counter++;

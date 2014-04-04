@@ -52,7 +52,6 @@ public class MainActivity extends ActionBarActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		getBroadcastAddress();
 		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		System.out.println("Layout ke baad wala");
@@ -307,25 +306,7 @@ public class MainActivity extends ActionBarActivity{
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	void getBroadcastAddress() {
-	    WifiManager wifi = (WifiManager) super.getSystemService(Context.WIFI_SERVICE);
-	    DhcpInfo dhcp = wifi.getDhcpInfo();
-	    // handle null somehow
-
-	    int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-	    byte[] quads = new byte[4];
-	    for (int k = 0; k < 4; k++)
-	      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-	    String s;
-		try {
-			s = InetAddress.getByAddress(quads).toString();
-			System.out.println("Extracted IP!!!!=====>"+s);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
-	}
+	
 
 	private final Handler mHandler = new Handler() {
 	    @Override
