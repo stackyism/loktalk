@@ -188,7 +188,7 @@ public class MainActivity extends ActionBarActivity{
 			break;
 		case 1:
 			if(listfragment2 == null){
-				listfragment2 = new HomeFragment2();
+				listfragment2 = new Addfragment();
 				selected=1;
 			}
 			else
@@ -227,6 +227,7 @@ public class MainActivity extends ActionBarActivity{
 
 		switch(selected){
 		case 1:
+			try{
 			System.out.println("fragment is getting created");
 			FragmentTransaction ft =getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.frame_container, listfragment2);
@@ -236,6 +237,9 @@ public class MainActivity extends ActionBarActivity{
 			mDrawerList.setSelection(position);
 			setTitle(navMenuTitles[position]);
 			mDrawerLayout.closeDrawer(mDrawerList);
+			}catch(Exception e){
+				System.out.println("yaha aaya error!!!!!"+e);
+			}
 			break;
 		case 0:
 			System.out.println("fragment is getting created");

@@ -12,6 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.loctalk.R;
+
+import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -28,7 +30,7 @@ import android.widget.TextView;
  * 
  *
  */
-public class MessageActivity extends BaseActivity {
+public class MessageActivity extends ListActivity {
 	/** Called when the activity is first created. */
 
 	ArrayList<Message1> messages;				//to  input messages to listview
