@@ -9,7 +9,7 @@ byte[] data="yttyty".getBytes();
 String ho;
 
 public sender(String s, String host){
-	ho = host;
+	ho = host.replace("/","");
 	System.out.println(s);
 	data=s.getBytes();//name.getBytes();
 	try{

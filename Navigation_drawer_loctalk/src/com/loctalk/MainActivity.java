@@ -1,8 +1,13 @@
 package com.loctalk;
 
+import static com.loctalk.Constant.db;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import navigation.NavDrawerItem;
 import navigation.NavDrawerListAdapter;
@@ -29,7 +34,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 
-public class MainActivity extends ActionBarActivity{
+public class MainActivity extends ActionBarActivity implements dataTransfertoActivityInterface{
 	dataTransferInterface datatofragment;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -193,15 +198,15 @@ public class MainActivity extends ActionBarActivity{
 			
 			break;
 		case 1:
-			/*if(listfragment2 == null){
-				listfragment2 = new HomeFragment2();
+			if(listfragment2 == null){
+				listfragment2 = new groupFragment();
 				selected=1;
 			}
 			else
 			{
 				selected=1;
 			}
-			break;*/
+			break;
 		case 2:
 			/*if(listFragment3 == null){
 				listFragment3 = new PeersFragment();
@@ -230,29 +235,47 @@ public class MainActivity extends ActionBarActivity{
 		default:
 			break;
 		}
-
+		Bundle bundl;
+		FragmentTransaction ft;
 		switch(selected){
 		case 1:
-			System.out.println("fragment is getting created");
-			FragmentTransaction ft =getSupportFragmentManager().beginTransaction();
+			System.out.println("fragment--1 is getting created");
+			bundl = new Bundle();
+			bundl.putString("flag", "Group1");
+			listfragment2.setArguments(bundl);
+			ft =getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.frame_container, listfragment2);
-			//ft.addToBackStack(frag);
 			ft.commit();
+			datatofragment.passdatatofragment("id",getBroadcastAddress());
 			mDrawerList.setItemChecked(position, true);
 			mDrawerList.setSelection(position);
 			setTitle(navMenuTitles[position]);
 			mDrawerLayout.closeDrawer(mDrawerList);
 			break;
 		case 0:
-			System.out.println("fragment is getting created");
-			FragmentTransaction ft0 =getSupportFragmentManager().beginTransaction();
-			ft0.replace(R.id.frame_container, listfragment);
-			//ft.addToBackStack(frag);
-			ft0.commit();
+			try{
+			System.out.println("fragment--0 is getting created");
+			bundl = new Bundle();
+			bundl.putString("flag", "Group0");
+			listfragment.setArguments(bundl);
+			ft =getSupportFragmentManager().beginTransaction();
+			ft.replace(R.id.frame_container, listfragment);
+			ft.commit();
+			System.out.println("asd"+datatofragment);
+			
+			System.out.println("ok1");
 			mDrawerList.setItemChecked(position, true);
+			System.out.println("ok1");
 			mDrawerList.setSelection(position);
+			System.out.println("ok1");
 			setTitle(navMenuTitles[position]);
+			System.out.println("ok1");
 			mDrawerLayout.closeDrawer(mDrawerList);
+			System.out.println("ok1");
+			}
+			catch (Exception e) {
+				System.out.println("Error in frag,ent switch=====>"+e);
+			}
 			break;
 		case 2:
 			System.out.println("fragment is getting created");
@@ -312,12 +335,68 @@ public class MainActivity extends ActionBarActivity{
 	    @Override
 	    public void handleMessage(Message msg) {
 	    	System.out.println("message"+ msg.obj);
-	    	datatofragment.passdatatofragment(msg.toString());
+	    	datatofragment.passdatatofragment("message",msg.toString());
 	    }
 	};
-		
-		
+	String getBroadcastAddress() {
+		String s;
+		try {
+	    WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+	    DhcpInfo dhcp = wifi.getDhcpInfo();
+	    // handle null somehow
+
+	    int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+	    byte[] quads = new byte[4];
+	    for (int k = 0; k < 4; k++)
+	      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+	    
+	    
+			s = InetAddress.getByAddress(quads).toString();
+			System.out.println("Address====>"+s);
+			
+		} catch (Exception e) {
+			System.out.println("Error in getBroadcastAddress====>"+e);
+			s="NOIP";
+		}
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
+		//please insert a check if wifi is not on or it is not able to get the host string
+		return s;
 	}
 	
+	public void addtodb(String id, String nick, String msg, String flag){
+		JSONObject objStudent = new JSONObject();
+		String strID = id;
+		String strMsg = msg;
+		
+			// getNick(), getTime(), getFlag(), getID()
+		String strNick = nick ;
+		//Date d = new Date();
+		//CharSequence s  = DateFormat.format("hh:mm:ss", d.getTime());
+		//String strTime = s.toString();//SystemClock.currentThreadTimeMillis() ;
+		String strTime = "10:10 AM";
+		String strFlag= flag ;
+		
+		try {
+			objStudent.put("ID", strID);
+			objStudent.put("nick", strNick);
+			
+			objStudent.put("time", strTime);
+			objStudent.put("msg", strMsg);
+			objStudent.put("flag", strFlag);
+			System.out.println("Jason string for db==>>"+"\n"+objStudent.toString());
+			db.insertMsg(objStudent);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("DB error"+ e.getMessage().toString());
+		}
+	}
+
+	@Override
+	public void passdatatoActivity() {
+		datatofragment.passdatatofragment("ip",getBroadcastAddress());
+	}
+	}
 	
+
 

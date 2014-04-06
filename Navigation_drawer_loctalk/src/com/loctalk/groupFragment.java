@@ -34,10 +34,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class groupFragment extends ListFragment implements dataTransferInterface {
-	
-	public groupFragment(){}
-	
-	
 	ArrayList<Message1> messages;
 	AwesomeAdapter adapter;
 	EditText text;
@@ -45,7 +41,8 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 	Boolean chose= false,data = false;
 	static Random rand = new Random();	
 	static String sender = "Paliwal";
-	String broad = getBroadcastAddress() ;
+	String broad;
+	String groupFlag;
 	//MyReceiver myReceiver;
 	static int counter =0;
 	//Yeh aya hamare wale se...
@@ -56,14 +53,9 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 	TextView textv;
 	JSONObject jsonObject;
 	//SendMessage receiver;
-	
-	
-
-	
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
- 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+		groupFlag=getArguments().getString("flag");
         View rootView = inflater.inflate(R.layout.main, container, false);
         
         if (db == null)
@@ -74,28 +66,7 @@ public class groupFragment extends ListFragment implements dataTransferInterface
         return rootView;
     }
 	
-	String getBroadcastAddress() {
-		try {
-	    WifiManager wifi = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-	    DhcpInfo dhcp = wifi.getDhcpInfo();
-	    // handle null somehow
 
-	    int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-	    byte[] quads = new byte[4];
-	    for (int k = 0; k < 4; k++)
-	      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-	    String s;
-		
-			s = InetAddress.getByAddress(quads).toString();
-			
-		} catch (Exception e) {
-			System.out.println("Error in getBroadcastAddress====>"+e);
-		
-		}
-		
-		//please insert a check if wifi is not on or it is not able to get the host string
-		return s;
-	}
 	
 	public String getID(){
 		counter++;
@@ -123,6 +94,8 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 		  super.onAttach(activity);
 		  Activity context = getActivity();
 		  ((MainActivity)context).datatofragment = this;
+		  ((MainActivity)context).passdatatoActivity();
+		  System.out.println("from fragment"+((MainActivity)context).datatofragment.getClass());
 		}
 	@Override
 	public void onStart() {
@@ -275,7 +248,7 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 		//to.show();
 		//System.out.println("added to db!!===>>>"+i);
 		try{
-			String se = createJSON(newMessage,"Yeh msg hai");
+			String se = createJSON(newMessage,groupFlag);
 			sen= new sender(se,broad);
 			sen.start();}
 			
@@ -456,8 +429,15 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 
 
 	@Override
-	public void passdatatofragment(String msg) {
-		addNewMessagessend(new Message1(msg, false));
+	public void passdatatofragment(String id,String msg) {
+		if(id=="ip")
+		{
+			broad=msg;
+		}
+		else
+		{
+			addNewMessagessend(new Message1(msg, false));
+		}
 		return;
 	}
 	

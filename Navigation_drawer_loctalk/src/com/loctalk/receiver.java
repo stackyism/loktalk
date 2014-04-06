@@ -48,10 +48,12 @@ public class receiver extends Thread {
 				String message =new String(packet.getData(), 0, packet.getLength());
 				System.out.println(""+message);
 				pass=message;
+				String ip = packet.getAddress().toString();
+				String temp = pass+"splistr"+ip;
 				state=true;
 				System.out.println("received"+pass);
 
-				mHandler.obtainMessage(1,pass).sendToTarget();
+				mHandler.obtainMessage(1,temp).sendToTarget();
 				//ma.getstring(message);
 				//textv.setText(message);
 				//textv.setText("fuck"+textv.getText().toString()+message);
