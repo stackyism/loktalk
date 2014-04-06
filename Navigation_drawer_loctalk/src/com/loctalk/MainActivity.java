@@ -5,10 +5,8 @@ import static com.loctalk.Constant.db;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import navigation.NavDrawerItem;
 import navigation.NavDrawerListAdapter;
 import android.content.Context;

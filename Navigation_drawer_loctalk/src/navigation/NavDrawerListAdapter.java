@@ -1,7 +1,6 @@
 package navigation;
 
 import com.loctalk.*;
-import com.loctalk.R.color;
 import com.loctalk.*;
 
 import java.util.ArrayList;
