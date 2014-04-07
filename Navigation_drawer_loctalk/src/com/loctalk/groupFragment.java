@@ -439,6 +439,17 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 		}
 		return;
 	}
+
+
+
+
+
+	@Override
+	public void passdatatopeerfragment(String broadip, String[] data,
+			String peerip) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

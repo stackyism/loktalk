@@ -207,8 +207,8 @@ public class peerActivity extends ListActivity {
 				}
 			
 			else if(temp_parse[3].equals("Yeh msg hai")){
-				MessageActivity ma2 = new MessageActivity();
-				ma2.addFromPeerToMsg(message);
+				//MessageActivity ma2 = new MessageActivity();
+				//ma2.addFromPeerToMsg(message);
 			}
 			
 			else if(temp_parse[3].equals("Peers request")){

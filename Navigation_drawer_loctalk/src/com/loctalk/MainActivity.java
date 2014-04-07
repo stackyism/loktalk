@@ -1,6 +1,11 @@
 package com.loctalk;
 
 import static com.loctalk.Constant.db;
+import static com.loctalk.Constant.dbFunctions;
+import static com.loctalk.Constant.jsonFunctions1;
+import static com.loctalk.Constant.myAppID;
+import static com.loctalk.Constant.myNick;
+
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -34,6 +39,7 @@ import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity implements dataTransfertoActivityInterface{
 	dataTransferInterface datatofragment;
+	dataTransferInterface datatopeerfragment;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -50,6 +56,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
 	receiver receiverthread;
+	sender senMain;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -238,9 +245,10 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 		switch(selected){
 		case 1:
 		try{
-			System.out.println("fragment--1 is getting created");
+			System.out.println("fragment--peer is getting created");
 			bundl = new Bundle();
 			bundl.putString("flag", "Group1");
+			bundl.putString("broadip", getBroadcastAddress());
 			listfragment2.setArguments(bundl);
 			ft =getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.frame_container, listfragment2);
@@ -330,10 +338,103 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	private final Handler mHandler = new Handler() {
 	    @Override
 	    public void handleMessage(Message msg) {
-	    	System.out.println("message"+ msg.obj);
-	    	datatofragment.passdatatofragment("message",msg.toString());
+	    	/*
+	    	 * receiving message from receiver thread via handler
+	    	 * 
+	    	 * obj conatins a string(recStr) of the form message-splitstr-ip
+	    	 * 
+	    	 * recAr[0] contains message
+	    	 * recAr[1] contains IP of the message from where it was sent.
+	    	 */
+	    	
+	    	String recStr = msg.obj.toString();
+	    	String[] recAr = recStr.split("splitstr");
+	    	System.out.println("message=="+ recAr[0]+"=== IP :"+recAr[1]);
+	    	try {
+	    		/*
+	    		 * Parsing the received message and carrying out the required tasks.
+	    		 */
+	    		
+				String[] parsedStr = jsonFunctions1.parseUltiJSON(recAr[0]);
+				
+				if(parsedStr[3].equals("adReq")){
+					
+				}
+				
+				else if(parsedStr[3].equals("adReply")){
+					
+				}
+				
+				else if(parsedStr[3].equals("adSeek")){
+					
+				}
+				
+				else if(parsedStr[3].equals("adSent")){
+					
+				}
+				
+				else if(parsedStr[3].equals("adUpvote")){
+					
+				}
+				
+				else if(parsedStr[3].equals("adDlt")){
+					
+				}
+				
+				else if(parsedStr[3].equals("postAd")){
+					
+				}
+				
+				else if(parsedStr[3].equals("postGen")){
+					
+				}
+				
+				else if(parsedStr[3].equals("postEvent")){
+					
+				}
+				
+				else if(parsedStr[3].equals("postHelp")){
+					
+				}
+				
+				else if(parsedStr[3].equals("postBusi")){
+					
+				}
+				
+				else if(parsedStr[3].equals("postFood")){
+					
+				}
+				
+				else if(parsedStr[3].equals("chatMsg")){
+					datatofragment.passdatatofragment("message",msg.toString());
+				}
+				
+				else if(parsedStr[3].equals("chatReq")){
+					
+				}
+				
+				else if(parsedStr[3].equals("chatReply")){
+					
+				}
+				
+				else if(parsedStr[3].equals("peerReq")){
+					String toSend = jsonFunctions1.createUltiJSON(myAppID, myNick, "Hi peer", "peerReply");
+					senMain = new sender(toSend,recAr[1]);
+					senMain.start();
+					
+				}
+				
+				else if(parsedStr[3].equals("peerReply")){
+					datatopeerfragment.passdatatopeerfragment(getBroadcastAddress(), parsedStr,recAr[1]);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
 	    }
 	};
+
 	String getBroadcastAddress() {
 		String s;
 		try {
