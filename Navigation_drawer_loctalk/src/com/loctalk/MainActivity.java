@@ -197,7 +197,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			break;
 		case 1:
 			if(listfragment2 == null){
-				listfragment2 = new groupFragment();
+				listfragment2 = new Addfragment();
 				selected=1;
 			}
 			else
@@ -214,9 +214,9 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			{
 				selected=2;
 			}*/
-		Intent i = new Intent(MainActivity.this, peerActivity.class);
+		/*Intent i = new Intent(MainActivity.this, peerActivity.class);
 		selected=99;
-		MainActivity.this.startActivity(i);
+		MainActivity.this.startActivity(i);*/
 		
 			//fragment = new PhotosFragment();
 			break;
@@ -237,6 +237,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 		FragmentTransaction ft;
 		switch(selected){
 		case 1:
+		try{
 			System.out.println("fragment--1 is getting created");
 			bundl = new Bundle();
 			bundl.putString("flag", "Group1");
@@ -244,11 +245,14 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			ft =getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.frame_container, listfragment2);
 			ft.commit();
-			datatofragment.passdatatofragment("id",getBroadcastAddress());
+			}catch(Exception e){
+				System.out.println("yaha aaya error!!!!!"+e);
+			}	
 			mDrawerList.setItemChecked(position, true);
 			mDrawerList.setSelection(position);
 			setTitle(navMenuTitles[position]);
 			mDrawerLayout.closeDrawer(mDrawerList);
+			
 			break;
 		case 0:
 			try{
@@ -259,21 +263,15 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			ft =getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.frame_container, listfragment);
 			ft.commit();
-			System.out.println("asd"+datatofragment);
-			
-			System.out.println("ok1");
-			mDrawerList.setItemChecked(position, true);
-			System.out.println("ok1");
-			mDrawerList.setSelection(position);
-			System.out.println("ok1");
-			setTitle(navMenuTitles[position]);
-			System.out.println("ok1");
-			mDrawerLayout.closeDrawer(mDrawerList);
-			System.out.println("ok1");
 			}
 			catch (Exception e) {
 				System.out.println("Error in frag,ent switch=====>"+e);
 			}
+			mDrawerList.setItemChecked(position, true);
+			mDrawerList.setSelection(position);
+			setTitle(navMenuTitles[position]);
+			mDrawerLayout.closeDrawer(mDrawerList);
+			
 			break;
 		case 2:
 			System.out.println("fragment is getting created");

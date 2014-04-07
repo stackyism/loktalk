@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
-
+import android.widget.ImageButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -158,8 +158,7 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 //		}
 //		
 		text = (EditText) getActivity().findViewById(R.id.text);
-		Button button = (Button)getActivity().findViewById(R.id.sendButton);
-		
+		ImageButton button = (ImageButton)getActivity().findViewById(R.id.sendButton);		
 		//sender = Utility.sender[rand.nextInt( Utility.sender.length-1)];
 		getActivity().setTitle(sender);
 		messages = new ArrayList<Message1>();
@@ -416,7 +415,7 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 	@Override
 	public void onDestroyView() {
 		
-		sendMessage(getView(),"please kill every thing before you moveon");
+		//sendMessage(getView(),"please kill every thing before you moveon");
 		//receiver.cancel(true);
 		super.onDestroyView();
 	}

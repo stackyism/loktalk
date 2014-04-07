@@ -10,8 +10,6 @@ import java.util.Random;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.loctalk.R;
-
 import com.loctalk.*;
 import com.loctalk.database.AppDB;
 
@@ -25,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class HomeFragment extends ListFragment {
@@ -154,7 +153,7 @@ public class HomeFragment extends ListFragment {
 //		}
 //		
 		text = (EditText) getActivity().findViewById(R.id.text);
-		Button button = (Button)getActivity().findViewById(R.id.sendButton);
+		ImageButton button = (ImageButton)getActivity().findViewById(R.id.sendButton);
 		
 		//sender = Utility.sender[rand.nextInt( Utility.sender.length-1)];
 		getActivity().setTitle(sender);

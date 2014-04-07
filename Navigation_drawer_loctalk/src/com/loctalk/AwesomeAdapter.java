@@ -2,8 +2,6 @@ package com.loctalk;
 
 import java.util.ArrayList;
 
-import com.loctalk.R;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;

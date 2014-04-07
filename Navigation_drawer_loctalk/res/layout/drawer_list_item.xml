@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="48dp" 
-    android:background="@drawable/list_selector">
+    android:layout_height="48dp"
+    android:background="@drawable/message_field" >
+    
+    
 
     <ImageView
         android:id="@+id/icon"
@@ -30,9 +32,11 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        
         android:gravity="fill_vertical"
-        android:textSize="17dp"
-        android:paddingRight="40dp"
-        android:textColor="@color/list_item_title" />
+        android:paddingTop="13dp"
+        android:paddingLeft="5dp"
+        android:textColor="@color/textFieldColor"
+        android:textSize="17sp" />
 
 </RelativeLayout>
