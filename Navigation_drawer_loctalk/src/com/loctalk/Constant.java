@@ -11,8 +11,8 @@ public class Constant {
 	public static AppDB db;
 	public static String myAppID = profileS1.getAppID();
 	public static String myNick = profileS1.getNick();
-	public static dbFunc dbFunctions;
-	public static jsonSolver jsonFunctions1;
+	public static dbFunc dbFunctions = new dbFunc();
+	public static jsonSolver jsonFunctions1 =new jsonSolver();
 	
 	
 }

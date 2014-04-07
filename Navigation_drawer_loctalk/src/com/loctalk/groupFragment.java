@@ -1,6 +1,10 @@
 package com.loctalk;
 
 import static com.loctalk.Constant.db;
+import static com.loctalk.Constant.dbFunctions;
+import static com.loctalk.Constant.jsonFunctions1;
+import static com.loctalk.Constant.myAppID;
+import static com.loctalk.Constant.myNick;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -73,23 +77,7 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 		String sd = Integer.toString(counter);
 		return sd;
 	}
-	public String getNick(){
-		return sender;
-	}
-	public String [] parseJSON(String msgJSONValue) throws JSONException
-	{
-		jsonObject = new JSONObject(msgJSONValue);
-
-		JSONObject object = jsonObject.getJSONObject("Message");
-		String sender = object.getString("Sender");
-		String time = object.getString("Time");
-	    String msg_text = object.getString("Msg");
-	    String flag = object.getString("Flag");
-	    String temp[] = {sender,time,msg_text,flag};
-	    System.out.println("Parse===>>	"+sender+time+msg_text);
-	    return (temp);
-		
-	}
+	
 	public void onAttach(Activity activity){
 		  super.onAttach(activity);
 		  Activity context = getActivity();
@@ -121,20 +109,6 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 		//receiver= new SendMessage();
 		super.onCreate(savedInstanceState);
 	}
-	
-	
-	public String createJSON(String msg_value, String flag) throws JSONException{
-		
-		//String temp = "{\"Message\": {\"Msg\": \""+msg_value+"\",\"Time\": \""+"10:10"+"\",\"Sender\"";
-	    //String temp = "{\"Message\": {\"Sender\": \""+sender_nick+"\",\"Time\": \""+time_value+"\",\"Msg\"   ":\""+nick+"\"}}";
-		// replace by uncommented string by commented and call get_nick() to get nick;
-	    
-		String temp = "{\"Message\": {\"Sender\": \""+sender+"\",\"Time\": \""+"time_value"+"\",\"Msg\":\""+msg_value+"\",\"Flag\":\""+flag+"\"}}";
-	    return temp;
-	}
-	
-	
-	
 	
 	
 	@Override
@@ -247,7 +221,7 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 		//to.show();
 		//System.out.println("added to db!!===>>>"+i);
 		try{
-			String se = createJSON(newMessage,groupFlag);
+			String se = jsonFunctions1.createUltiJSON("2323", "bulla", newMessage, "chatMsg");
 			sen= new sender(se,broad);
 			sen.start();}
 			
@@ -274,7 +248,7 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 		//to.show();
 		//System.out.println("added to db!!===>>>"+i);
 		try{
-			String se = createJSON(newMessage,"Yeh msg hai");
+			String se = jsonFunctions1.createUltiJSON("2323", "bulla", newMessage, "chatMsg");
 			sen= new sender(se,broad);
 			sen.start();}
 			catch(Exception e){

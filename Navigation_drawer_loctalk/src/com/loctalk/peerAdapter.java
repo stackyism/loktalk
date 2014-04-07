@@ -46,7 +46,7 @@ public class peerAdapter extends BaseAdapter {
 		// TODO Auto-generated method stub
 		View vi = convertView;
 		
-            vi = LayoutInflater.from(lcontext).inflate(R.layout.row_advt, parent, false);
+            vi = LayoutInflater.from(lcontext).inflate(R.layout.peerrow, parent, false);
 		
           TextView nametv = (TextView) vi.findViewById(R.id.title);
           ImageView band = (ImageView) vi.findViewById(R.id.stripe);

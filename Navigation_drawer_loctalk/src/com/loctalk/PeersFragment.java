@@ -16,6 +16,7 @@ import com.loctalk.R;
 import com.loctalk.database.AppDB;
 //import com.color.speechbubble.peerActivity.SendMessage;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -43,7 +44,13 @@ public class PeersFragment extends ListFragment implements dataTransferInterface
 	 
 	 
 	 
-	 
+	 public void onAttach(Activity activity){
+		  super.onAttach(activity);
+		  Activity context = getActivity();
+		  ((MainActivity)context).datatopeerfragment = this;
+		  //((MainActivity)context).passdatatoActivity();
+		  //System.out.println("from fragment"+((MainActivity)context).datatofragment.getClass());
+		}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -61,6 +68,11 @@ public class PeersFragment extends ListFragment implements dataTransferInterface
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		peerName = new ArrayList<peerData>();
+		peerName.add(new peerData("chomu", 2));
+		peerName.add(new peerData("totu", 1));
+		peerName.add(new peerData("somu", 0));
 		adapter = new peerAdapter(getActivity(), peerName);
 		setListAdapter(adapter);
 		System.out.println("peer fragment");

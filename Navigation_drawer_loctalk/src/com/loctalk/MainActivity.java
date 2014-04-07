@@ -180,9 +180,9 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	 * Diplaying fragment view for selected nav drawer list item
 	 * */
 	String frag;
-	ListFragment listfragment = null;
-	ListFragment listfragment2 = null;
-	ListFragment listFragment3 = null;
+	static ListFragment listfragment = null;
+	static ListFragment listfragment2 = null;
+	static ListFragment listfragment3 = null;
 	int selected;
 	static Fragment fragment = null;
 	private void displayView(int position) {
@@ -213,14 +213,14 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			}
 			break;
 		case 2:
-			/*if(listFragment3 == null){
-				listFragment3 = new PeersFragment();
+			if(listfragment3 == null){
+				listfragment3 = new PeersFragment();
 				selected=2;
 			}
 			else
 			{
 				selected=2;
-			}*/
+			}
 		/*Intent i = new Intent(MainActivity.this, peerActivity.class);
 		selected=99;
 		MainActivity.this.startActivity(i);*/
@@ -243,15 +243,15 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 		Bundle bundl;
 		FragmentTransaction ft;
 		switch(selected){
-		case 1:
+		case 2:
 		try{
 			System.out.println("fragment--peer is getting created");
 			bundl = new Bundle();
 			bundl.putString("flag", "Group1");
 			bundl.putString("broadip", getBroadcastAddress());
-			listfragment2.setArguments(bundl);
+			listfragment3.setArguments(bundl);
 			ft =getSupportFragmentManager().beginTransaction();
-			ft.replace(R.id.frame_container, listfragment2);
+			ft.replace(R.id.frame_container, listfragment3);
 			ft.commit();
 			}catch(Exception e){
 				System.out.println("yaha aaya error!!!!!"+e);
@@ -281,10 +281,10 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			mDrawerLayout.closeDrawer(mDrawerList);
 			
 			break;
-		case 2:
+		case 1:
 			System.out.println("fragment is getting created");
 			FragmentTransaction ft2 =getSupportFragmentManager().beginTransaction();
-			ft2.replace(R.id.frame_container, listFragment3);
+			ft2.replace(R.id.frame_container, listfragment2);
 			//ft.addToBackStack(frag);
 			ft2.commit();
 			mDrawerList.setItemChecked(position, true);
@@ -349,6 +349,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	    	
 	    	String recStr = msg.obj.toString();
 	    	String[] recAr = recStr.split("splitstr");
+	    	System.out.println("message==lololol"+recStr);
 	    	System.out.println("message=="+ recAr[0]+"=== IP :"+recAr[1]);
 	    	try {
 	    		/*
@@ -356,6 +357,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	    		 */
 	    		
 				String[] parsedStr = jsonFunctions1.parseUltiJSON(recAr[0]);
+				System.out.println("parsed STR==="+parsedStr[2]);
 				
 				if(parsedStr[3].equals("adReq")){
 					
@@ -406,7 +408,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 				}
 				
 				else if(parsedStr[3].equals("chatMsg")){
-					datatofragment.passdatatofragment("message",msg.toString());
+					datatofragment.passdatatofragment("message",recAr[0]);
 				}
 				
 				else if(parsedStr[3].equals("chatReq")){
