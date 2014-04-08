@@ -3,17 +3,16 @@ package com.loctalk;
 import static com.loctalk.Constant.db;
 import static com.loctalk.Constant.dbFunctions;
 import static com.loctalk.Constant.jsonFunctions1;
+import static com.loctalk.Constant.myAppID;
+import static com.loctalk.Constant.myNick;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.loctalk.database.AppDB;
-
 import navigation.NavDrawerItem;
 import navigation.NavDrawerListAdapter;
 import android.content.Context;
@@ -41,6 +40,7 @@ import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity implements dataTransfertoActivityInterface{
 	dataTransferInterface datatofragment;
+	dataTransferInterface datatopeerfragment;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -57,6 +57,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
 	receiver receiverthread;
+	sender senMain;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -218,19 +219,14 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			}
 			break;
 		case 2:
-			/*if(listFragment3 == null){
-				listFragment3 = new PeersFragment();
+			if(listfragment3 == null){
+				listfragment3 = new PeersFragment();
 				selected=2;
 			}
 			else
 			{
 				selected=2;
-			}*/
-		/*Intent i = new Intent(MainActivity.this, peerActivity.class);
-		selected=99;
-		MainActivity.this.startActivity(i);*/
-		
-			//fragment = new PhotosFragment();
+			}
 			break;
 		case 3:
 			if(listfragment4 == null){
@@ -255,14 +251,15 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 		Bundle bundl;
 		
 		switch(selected){
-		case 1:
+		case 2:
 		try{
-			System.out.println("fragment--1 is getting created");
+			System.out.println("fragment--peer is getting created");
 			bundl = new Bundle();
 			bundl.putString("flag", "Group1");
-			listfragment2.setArguments(bundl);
+			bundl.putString("broadip", getBroadcastAddress());
+			listfragment3.setArguments(bundl);
 			ft =getSupportFragmentManager().beginTransaction();
-			ft.replace(R.id.frame_container, listfragment2);
+			ft.replace(R.id.frame_container, listfragment3);
 			ft.commit();
 			}catch(Exception e){
 				System.out.println("yaha aaya error!!!!!"+e);
@@ -292,10 +289,10 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			mDrawerLayout.closeDrawer(mDrawerList);
 			
 			break;
-		case 2:
+		case 1:
 			System.out.println("fragment is getting created");
 			FragmentTransaction ft2 =getSupportFragmentManager().beginTransaction();
-			ft2.replace(R.id.frame_container, listfragment3);
+			ft2.replace(R.id.frame_container, listfragment2);
 			//ft.addToBackStack(frag);
 			ft2.commit();
 			mDrawerList.setItemChecked(position, true);
@@ -374,46 +371,47 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	    	 * 
 	    	 * recAr[0] contains message
 	    	 * recAr[1] contains IP of the message from where it was sent.
-	    	 */
-	    	try{
+	    	 */    	
 	    	String recStr = msg.obj.toString();
 	    	String[] recAr = recStr.split("splitstr");
+	    	System.out.println("message==lololol"+recStr);
 	    	System.out.println("message=="+ recAr[0]+"=== IP :"+recAr[1]);
-	    	
+	    	try {
 	    		/*
 	    		 * Parsing the received message and carrying out the required tasks.
 	    		 */
-
+	    		
 				String[] parsedStr = jsonFunctions1.parseUltiJSON(recAr[0]);
-
+				System.out.println("parsed STR==="+parsedStr[2]);
+				
 				if(parsedStr[3].equals("adReq")){
-
+					
 				}
-
+				
 				else if(parsedStr[3].equals("adReply")){
-
+					
 				}
-
+				
 				else if(parsedStr[3].equals("adSeek")){
-
+					
 				}
-
+				
 				else if(parsedStr[3].equals("adSent")){
-
+					
 				}
-
+				
 				else if(parsedStr[3].equals("adUpvote")){
-
+					
 				}
-
+				
 				else if(parsedStr[3].equals("adDlt")){
-
+					
 				}
-
+				
 				else if(parsedStr[3].equals("postAd")){
-
+					
 				}
-
+				
 				else if(parsedStr[3].equals("postGen")){
 					String ID=(db.countPost()+1)+"";
 					Calendar c = Calendar.getInstance(); 
@@ -434,45 +432,50 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 					datatofragment.passdatatofragment("message",msg.toString());
 
 				}
-
-				else if(parsedStr[3].equals("postHelp")){
-
-				}
-
-				else if(parsedStr[3].equals("postBusi")){
-
-				}
-
-				else if(parsedStr[3].equals("postFood")){
-
-				}
-
-				else if(parsedStr[3].equals("chatMsg")){
-				//	datatofragment.passdatatofragment("message",msg.toString());
-				}
-
-				else if(parsedStr[3].equals("chatReq")){
-
-				}
-
-				else if(parsedStr[3].equals("chatReply")){
-
-				}
-
-				else if(parsedStr[3].equals("peerReq")){
-
-
-				}
-
-				else if(parsedStr[3].equals("peerReply")){
 				
+				else if(parsedStr[3].equals("postHelp")){
+					
 				}
-			} catch (Exception e) {
+				
+				else if(parsedStr[3].equals("postBusi")){
+					
+				}
+				
+				else if(parsedStr[3].equals("postFood")){
+					
+				}
+				
+				else if(parsedStr[3].equals("chatMsg")){
+					datatofragment.passdatatofragment("message",recAr[0]);
+					//add notification
+				}
+				
+				else if(parsedStr[3].equals("chatReq")){
+					dbFunctions.addtoChatReq(parsedStr[0], parsedStr[1], recAr[1], "0", "0");
+					//add notification
+				}
+				
+				else if(parsedStr[3].equals("chatReply")){
+					db.updPC(2, parsedStr[0]);
+					//notify listview to update the band
+					
+					
+				}
+				
+				else if(parsedStr[3].equals("peerReq")){
+					String toSend = jsonFunctions1.createUltiJSON(myAppID, myNick, "Hi peer", "peerReply");
+					senMain = new sender(toSend,recAr[1]);
+					senMain.start();
+					
+				}
+				
+				else if(parsedStr[3].equals("peerReply")){
+					datatopeerfragment.passdatatopeerfragment(0, parsedStr,recAr[1]);
+				}
+			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				System.out.println("handle message"+e);
 			}
-
 	    }
 	};
 

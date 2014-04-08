@@ -3,10 +3,10 @@ package com.loctalk;
 public class profileSolver {
 
 	public String getNick(){
-		return "pali";
+		return "hmc";
 	}
 	
 	public String getAppID(){
-		return "123";
+		return "890";
 	}
 }

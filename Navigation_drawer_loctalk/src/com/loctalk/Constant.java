@@ -13,6 +13,7 @@ public class Constant {
 	public static String myNick = profileS1.getNick();
 	public static dbFunc dbFunctions;
 	public static jsonSolver jsonFunctions1=new jsonSolver();
+
 	
 	
 }

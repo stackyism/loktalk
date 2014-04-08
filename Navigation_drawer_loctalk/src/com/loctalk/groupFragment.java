@@ -60,7 +60,6 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 	}
 	
 	
@@ -171,5 +170,11 @@ public class groupFragment extends ListFragment implements dataTransferInterface
 			addNewMessages(new Message1(msg, false));
 		}
 		return;
+	}
+	@Override
+	public void passdatatopeerfragment(int PCstatus, String[] data,
+			String peerip) {
+		// TODO Auto-generated method stub
+		
 	}
 }

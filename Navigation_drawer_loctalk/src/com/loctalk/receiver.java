@@ -51,7 +51,7 @@ public class receiver extends Thread {
 				String ip = packet.getAddress().toString();
 				String temp = pass+"splitstr"+ip;
 				state=true;
-				System.out.println("received"+pass);
+				System.out.println("received"+temp);
 
 				mHandler.obtainMessage(1,temp).sendToTarget();
 				//ma.getstring(message);
