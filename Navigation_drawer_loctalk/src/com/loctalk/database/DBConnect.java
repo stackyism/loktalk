@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -203,6 +204,23 @@ public class DBConnect extends SQLiteOpenHelper {
 		return cursor;
 	}
 
+	public synchronized int updateAdd(String values, String id, String appID){
+		ContentValues cv = new ContentValues();
+		cv.put("Vote", values);
+		String where = "ID=? AND AppID=?";
+		String whereArgs[] = new String[]{id,appID};
+		int n = db.update("Premium", cv, where, whereArgs);
+		return n;
+		}
+	
+	public synchronized int updatePC(int values, String appID){
+		ContentValues cv = new ContentValues();
+		cv.put("PC", values);
+		String where = "AppID="+appID;
+		int n = db.update("Peers", cv, where, null);
+		return n;
+		}
+	
 	public void backup() {
 		try {
 			File sd = Environment.getExternalStorageDirectory();

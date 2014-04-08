@@ -409,13 +409,18 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 				
 				else if(parsedStr[3].equals("chatMsg")){
 					datatofragment.passdatatofragment("message",recAr[0]);
+					//add notification
 				}
 				
 				else if(parsedStr[3].equals("chatReq")){
-					
+					dbFunctions.addtoChatReq(parsedStr[0], parsedStr[1], recAr[1], "0", "0");
+					//add notification
 				}
 				
 				else if(parsedStr[3].equals("chatReply")){
+					db.updPC(2, parsedStr[0]);
+					//notify listview to update the band
+					
 					
 				}
 				
@@ -427,7 +432,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 				}
 				
 				else if(parsedStr[3].equals("peerReply")){
-					datatopeerfragment.passdatatopeerfragment(getBroadcastAddress(), parsedStr,recAr[1]);
+					datatopeerfragment.passdatatopeerfragment(0, parsedStr,recAr[1]);
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

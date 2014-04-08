@@ -70,9 +70,10 @@ public class PeersFragment extends ListFragment implements dataTransferInterface
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		peerName = new ArrayList<peerData>();
-		peerName.add(new peerData("chomu", 2));
+		/*peerName.add(new peerData("chomu", 2));
 		peerName.add(new peerData("totu", 1));
 		peerName.add(new peerData("somu", 0));
+		*/
 		adapter = new peerAdapter(getActivity(), peerName);
 		setListAdapter(adapter);
 		System.out.println("peer fragment");
@@ -83,7 +84,7 @@ public class PeersFragment extends ListFragment implements dataTransferInterface
 		
 	}
 	
-	public void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(ListView l, View v, final int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		final int index = position;
 		String tempid = this.id.get(index);
@@ -98,7 +99,13 @@ public class PeersFragment extends ListFragment implements dataTransferInterface
 					String req = jsonFunctions1.createUltiJSON(myAppID,myNick,"Lets Talk", "chatReq");
 					sen = new sender(req,peerInfo[2]);
 					sen.start();
+						/*
+						 * changing the colour to yellow
+						 */
+						
+						peerName.get(position).status=1;
 					
+					adapter.notifyDataSetChanged();
 			}
 		});
 		alert.setButton(alert.BUTTON_POSITIVE, "Cancel", new DialogInterface.OnClickListener() {
@@ -120,13 +127,23 @@ public class PeersFragment extends ListFragment implements dataTransferInterface
 
 
 	@Override
-	public void passdatatopeerfragment(String broadip, String[] data,
+	public void passdatatopeerfragment(int PCstatus, String[] data,
 			String peerip) {
 		// TODO Auto-generated method stub
-		broadcastip = broadip;
 		//dbFunctions.addtopeerdb(data[0], data[1], peerip, "0", "0");
-		peerName.add(new peerData(data[1],0));
-		id.add(data[0]);
+		if(PCstatus==0){
+			peerName.add(new peerData(data[1],PCstatus));
+			id.add(data[0]);
+		}
+		else if (PCstatus==2){
+			/*
+			 * finding the index in the list peerName where
+			 * status has to be changed and then changing it.
+			 */
+			
+			int m = id.indexOf(data[0]);
+			peerName.get(m).status=2;
+		}
 		adapter.notifyDataSetChanged();
 		//addtopeerlistview(peerName);
 	}

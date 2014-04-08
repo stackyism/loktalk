@@ -182,6 +182,10 @@ public class AppDB extends DBConnect {
 	 * To count no. of Chat requests
 	 * @return
 	 */
+	public void updPC(int status, String AppID){
+		int test = updatePC(status, AppID);
+	}
+	
 	public int countChatReq()
 	{
 		Cursor cursor = execQuery(ISql.COUNT_CHATREQ);
