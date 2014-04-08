@@ -49,7 +49,7 @@ public class receiver extends Thread {
 				System.out.println(""+message);
 				pass=message;
 				String ip = packet.getAddress().toString();
-				String temp = pass+"splistr"+ip;
+				String temp = pass+"splitstr"+ip;
 				state=true;
 				System.out.println("received"+pass);
 

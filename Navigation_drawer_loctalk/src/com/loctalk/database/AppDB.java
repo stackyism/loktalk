@@ -41,6 +41,91 @@ public class AppDB extends DBConnect {
 	}
  
 	/**
+	 * To insert Post
+	 * @param value
+	 */
+	public void insertPost(JSONObject objStudent) {
+		String sqlCards;
+		
+		try {
+			sqlCards = String.format(ISql.INSERT_Post, Integer.parseInt(objStudent.getString("ID")), 
+					Integer.parseInt(objStudent.getString("AppID")), 
+					objStudent.getString("Content"),
+					objStudent.getString("Time"),
+					objStudent.getString("Category"));
+					
+			
+			execNonQuery(sqlCards);			
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	/**
+	 * To get all Post from a Category
+	 * @return
+	 */
+	public ArrayList<JSONObject> getPost(String Category) {
+		String sqlCards;
+		sqlCards = String.format(ISql.GET_Post,Category );
+		Cursor cursor = execQuery(sqlCards);
+
+		ArrayList<JSONObject> listPost = new ArrayList<JSONObject>();
+		JSONObject objStudent;
+		
+		if (cursor != null && cursor.getCount() > 0) {
+
+			if (cursor.moveToNext()) {
+
+				do {
+					objStudent = new JSONObject();
+					
+					try {
+						objStudent.put("ID", String.valueOf(cursor.getInt(cursor.getColumnIndex("ID"))));
+						objStudent.put("AppID", cursor.getString(cursor.getColumnIndex("AppID")));
+						objStudent.put("Content", cursor.getString(cursor.getColumnIndex("Content")));
+						objStudent.put("Time", cursor.getString(cursor.getColumnIndex("Time")));
+						objStudent.put("Category", cursor.getString(cursor.getColumnIndex("Category")));
+						listPost.add(objStudent);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				} while (cursor.moveToNext());
+			}
+		}
+
+		if (cursor != null) {
+			cursor.close();
+		}
+
+		return listPost;
+	}
+	
+	public int countPost()
+	{
+		Cursor cursor = execQuery(ISql.COUNT_Post);
+		int cntCards = 0;
+		
+		if(cursor!=null && cursor.getCount()>0) {
+			cursor.moveToNext();
+			cntCards = Integer.parseInt(cursor.getString(0));
+		}
+		
+		if(cursor!= null) {
+			cursor.close();
+		}
+			
+		return cntCards;
+	}
+	/**
 	 * To insert peer
 	 * @param value
 	 */

@@ -1,12 +1,19 @@
 package com.loctalk;
 
 import static com.loctalk.Constant.db;
-
+import static com.loctalk.Constant.dbFunctions;
+import static com.loctalk.Constant.jsonFunctions1;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.loctalk.database.AppDB;
+
 import navigation.NavDrawerItem;
 import navigation.NavDrawerListAdapter;
 import android.content.Context;
@@ -58,8 +65,11 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 		//super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		System.out.println("Layout ke baad wala");
-		
-		
+		//Initialization of database constants
+		if (db == null){
+			db = new AppDB(this);
+			dbFunctions=new dbFunc(db);
+		}
 		mTitle = mDrawerTitle = getTitle();
 		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 		
@@ -175,8 +185,10 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	String frag;
 	ListFragment listfragment = null;
 	ListFragment listfragment2 = null;
-	ListFragment listFragment3 = null;
+	ListFragment listfragment3 = null;
+	ListFragment listfragment4 = null;
 	int selected;
+	FragmentTransaction ft;
 	static Fragment fragment = null;
 	private void displayView(int position) {
 		// update the main content by replacing fragments
@@ -220,10 +232,17 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 		
 			//fragment = new PhotosFragment();
 			break;
-		/*case 3:
-			fragment = new CommunityFragment();
+		case 3:
+			if(listfragment4 == null){
+				listfragment4 = new groupFragment();
+				selected=3;
+			}
+			else
+			{
+				selected=3;
+			}
 			break;
-		case 4:
+		/*case 4:
 			fragment = new PagesFragment();
 			break;
 		case 5:
@@ -234,7 +253,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			break;
 		}
 		Bundle bundl;
-		FragmentTransaction ft;
+		
 		switch(selected){
 		case 1:
 		try{
@@ -258,10 +277,10 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			try{
 			System.out.println("fragment--0 is getting created");
 			bundl = new Bundle();
-			bundl.putString("flag", "Group0");
+			bundl.putString("flag", "postGen");
 			listfragment.setArguments(bundl);
 			ft =getSupportFragmentManager().beginTransaction();
-			ft.replace(R.id.frame_container, listfragment);
+			ft.replace(R.id.frame_container, listfragment,"postGen");
 			ft.commit();
 			}
 			catch (Exception e) {
@@ -276,7 +295,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 		case 2:
 			System.out.println("fragment is getting created");
 			FragmentTransaction ft2 =getSupportFragmentManager().beginTransaction();
-			ft2.replace(R.id.frame_container, listFragment3);
+			ft2.replace(R.id.frame_container, listfragment3);
 			//ft.addToBackStack(frag);
 			ft2.commit();
 			mDrawerList.setItemChecked(position, true);
@@ -284,7 +303,25 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 			setTitle(navMenuTitles[position]);
 			mDrawerLayout.closeDrawer(mDrawerList);
 			break;
+		case 3:
+			try{
+			System.out.println("fragment--0 is getting created");
+			bundl = new Bundle();
+			bundl.putString("flag", "postEvent");
+			listfragment4.setArguments(bundl);
+			ft =getSupportFragmentManager().beginTransaction();
+			ft.replace(R.id.frame_container, listfragment4,"postEvent");
+			ft.commit();
+			}
+			catch (Exception e) {
+				System.out.println("Error in frag,ent switch=====>"+e);
+			}
+			mDrawerList.setItemChecked(position, true);
+			mDrawerList.setSelection(position);
+			setTitle(navMenuTitles[position]);
+			mDrawerLayout.closeDrawer(mDrawerList);
 			
+			break;	
 		default:
 			// error in creating fragment
 			Log.e("MainActivity", "Error in creating fragment");
@@ -330,10 +367,115 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	private final Handler mHandler = new Handler() {
 	    @Override
 	    public void handleMessage(Message msg) {
-	    	System.out.println("message"+ msg.obj);
-	    	datatofragment.passdatatofragment("message",msg.toString());
+	    	/*
+	    	 * receiving message from receiver thread via handler
+	    	 * 
+	    	 * obj conatins a string(recStr) of the form message-splitstr-ip
+	    	 * 
+	    	 * recAr[0] contains message
+	    	 * recAr[1] contains IP of the message from where it was sent.
+	    	 */
+	    	try{
+	    	String recStr = msg.obj.toString();
+	    	String[] recAr = recStr.split("splitstr");
+	    	System.out.println("message=="+ recAr[0]+"=== IP :"+recAr[1]);
+	    	
+	    		/*
+	    		 * Parsing the received message and carrying out the required tasks.
+	    		 */
+
+				String[] parsedStr = jsonFunctions1.parseUltiJSON(recAr[0]);
+
+				if(parsedStr[3].equals("adReq")){
+
+				}
+
+				else if(parsedStr[3].equals("adReply")){
+
+				}
+
+				else if(parsedStr[3].equals("adSeek")){
+
+				}
+
+				else if(parsedStr[3].equals("adSent")){
+
+				}
+
+				else if(parsedStr[3].equals("adUpvote")){
+
+				}
+
+				else if(parsedStr[3].equals("adDlt")){
+
+				}
+
+				else if(parsedStr[3].equals("postAd")){
+
+				}
+
+				else if(parsedStr[3].equals("postGen")){
+					String ID=(db.countPost()+1)+"";
+					Calendar c = Calendar.getInstance(); 
+					String time=c.getTime().toString();
+					dbFunctions.addtopostdb(ID, parsedStr[0],msg.toString(), time, parsedStr[3]);
+					Fragment frag=getSupportFragmentManager().findFragmentByTag("postGen");
+					if(frag.isVisible())
+					datatofragment.passdatatofragment("message",msg.toString());
+				}
+
+				else if(parsedStr[3].equals("postEvent")){
+					String ID=(db.countPost()+1)+"";
+					Calendar c = Calendar.getInstance(); 
+					String time=c.getTime().toString();
+					dbFunctions.addtopostdb(ID, parsedStr[0], msg.toString(), time, parsedStr[3]);
+					Fragment frag=getSupportFragmentManager().findFragmentByTag("postEvent");
+					if(frag.isVisible())
+					datatofragment.passdatatofragment("message",msg.toString());
+
+				}
+
+				else if(parsedStr[3].equals("postHelp")){
+
+				}
+
+				else if(parsedStr[3].equals("postBusi")){
+
+				}
+
+				else if(parsedStr[3].equals("postFood")){
+
+				}
+
+				else if(parsedStr[3].equals("chatMsg")){
+				//	datatofragment.passdatatofragment("message",msg.toString());
+				}
+
+				else if(parsedStr[3].equals("chatReq")){
+
+				}
+
+				else if(parsedStr[3].equals("chatReply")){
+
+				}
+
+				else if(parsedStr[3].equals("peerReq")){
+
+
+				}
+
+				else if(parsedStr[3].equals("peerReply")){
+				
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("handle message"+e);
+			}
+
 	    }
 	};
+
 	String getBroadcastAddress() {
 		String s;
 		try {
