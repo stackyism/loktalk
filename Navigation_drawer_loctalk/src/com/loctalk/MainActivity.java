@@ -371,47 +371,46 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	    	 * 
 	    	 * recAr[0] contains message
 	    	 * recAr[1] contains IP of the message from where it was sent.
-	    	 */    	
+	    	 */
+	    	try{
 	    	String recStr = msg.obj.toString();
 	    	String[] recAr = recStr.split("splitstr");
-	    	System.out.println("message==lololol"+recStr);
 	    	System.out.println("message=="+ recAr[0]+"=== IP :"+recAr[1]);
-	    	try {
+	    	
 	    		/*
 	    		 * Parsing the received message and carrying out the required tasks.
 	    		 */
-	    		
+
 				String[] parsedStr = jsonFunctions1.parseUltiJSON(recAr[0]);
-				System.out.println("parsed STR==="+parsedStr[2]);
-				
+
 				if(parsedStr[3].equals("adReq")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("adReply")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("adSeek")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("adSent")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("adUpvote")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("adDlt")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("postAd")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("postGen")){
 					String ID=(db.countPost()+1)+"";
 					Calendar c = Calendar.getInstance(); 
@@ -432,50 +431,45 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 					datatofragment.passdatatofragment("message",msg.toString());
 
 				}
-				
+
 				else if(parsedStr[3].equals("postHelp")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("postBusi")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("postFood")){
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("chatMsg")){
-					datatofragment.passdatatofragment("message",recAr[0]);
-					//add notification
+				//	datatofragment.passdatatofragment("message",msg.toString());
 				}
-				
+
 				else if(parsedStr[3].equals("chatReq")){
-					dbFunctions.addtoChatReq(parsedStr[0], parsedStr[1], recAr[1], "0", "0");
-					//add notification
+
 				}
-				
+
 				else if(parsedStr[3].equals("chatReply")){
-					db.updPC(2, parsedStr[0]);
-					//notify listview to update the band
-					
-					
+
 				}
-				
+
 				else if(parsedStr[3].equals("peerReq")){
-					String toSend = jsonFunctions1.createUltiJSON(myAppID, myNick, "Hi peer", "peerReply");
-					senMain = new sender(toSend,recAr[1]);
-					senMain.start();
-					
+
+
 				}
-				
+
 				else if(parsedStr[3].equals("peerReply")){
-					datatopeerfragment.passdatatopeerfragment(0, parsedStr,recAr[1]);
+				
 				}
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("handle message"+e);
 			}
+
 	    }
 	};
 

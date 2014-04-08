@@ -2,11 +2,12 @@ package com.loctalk;
 
 public class profileSolver {
 
+
 	public String getNick(){
-		return "hmc";
+		return "pali";
 	}
 	
 	public String getAppID(){
-		return "890";
+		return "123";
 	}
 }
