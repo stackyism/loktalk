@@ -4,6 +4,9 @@ public interface ISql {
 	
 	String INSERT_MSG = "INSERT OR REPLACE INTO Messages(ID, AppID, Content, Time) values (%d, %d, '%s', '%s')";
 	String GET_MSG = "SELECT ID,AppID,Content,Time FROM Messages";
+	String INSERT_Post = "INSERT OR REPLACE INTO Posts(ID, AppID, Content, Time,Category) values (%d, %d, '%s', '%s','%s')";
+	String GET_Post = "SELECT ID,AppID,Content,Time,Category FROM Posts where Category='%s'";
+	String COUNT_Post = "SELECT count(ID) from Posts";
 	String REMOVE_MSG = "DELETE FROM Messages WHERE ID = %d";
 	String COUNT_MSG = "SELECT count(ID) from Messages";
 	

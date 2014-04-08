@@ -1,13 +1,24 @@
 package com.loctalk;
 import static com.loctalk.Constant.db;
+import static com.loctalk.Constant.dbFunctions;
+import static  com.loctalk.Constant.myNick;
+import static  com.loctalk.Constant.myAppID;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.loctalk.database.AppDB;
+
+import android.content.Context;
+
 public class dbFunc {
 	
-	
+	public dbFunc(AppDB con){
+		if (db == null)
+			db = con;
+	}
 	
 	
 	public String getAd(){
@@ -79,7 +90,71 @@ public class dbFunc {
 	
 	}
 	}
+public void addtopostdb(String ID, String AppID, String Content, String Time,String Category){
+		
+		/*
+		 * Method to add post to the table-"Post".
+		 */
+		
+		JSONObject obj = new JSONObject();
+		
+		try {
+			obj.put("ID", ID);
+			obj.put("AppID", AppID);
+			obj.put("Content", Content);
+			obj.put("Time", Time);
+			obj.put("Category", Category);
+			System.out.println("Jason string for post DB==>>"+"\n"+obj.toString());
+			db.insertPost(obj);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("DB error"+ e.getMessage().toString());
+		}
+	}
+public ArrayList<Message1> getpostdb(String Category){
 	
+	/*
+	 * Method to get post to the table-"Post".
+	 */
+	ArrayList<JSONObject> Post=new ArrayList<JSONObject>();
+	ArrayList<Message1> Posttoreturn=new ArrayList<Message1>();
+	Message1 pmessage=null;
+	String AppID;
+	int Arraylength;
+	int j;
+	int i;
+	try {
+		Post=db.getPost(Category);
+		Arraylength=Post.size();
+		for(i=0;i<=Arraylength-1;i++)
+		{
+			AppID=Post.get(i).get("AppID").toString();
+			System.out.println("===========>"+Post.get(i).get("Content")+Post.get(i).get("Time"));
+			if(AppID.equals(myAppID))
+			{
+					pmessage=new Message1(myNick+Post.get(i).get("Content")+Post.get(i).get("Time"),true);//add time here
+				
+			}
+			else
+			{
+					pmessage=new Message1(db.getOnePeer(Integer.parseInt(AppID))[1]+Post.get(i).get("Content")+Post.get(i).get("Time"),false);//add time here
+			}
+			Posttoreturn.add(Posttoreturn.size(),pmessage);
+			for(j=0;j<=Posttoreturn.size()-1;j++)
+			{
+				System.out.println(";;;;;;;;;;;;;>"+Posttoreturn.get(i).getMessage());
+			}
+		}
+		
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		System.out.println("DB error"+ e.getMessage().toString());
+	}
+	
+	return Posttoreturn;
+}
 	public void addtomsgdb(String ID, String AppID, String Content, String Time){
 		
 		/*

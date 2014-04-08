@@ -50,7 +50,7 @@ public class AwesomeAdapter extends BaseAdapter{
 		}
 		else
 			holder = (ViewHolder) convertView.getTag();
-		
+		System.out.println("@@@@@@@@@>"+message.getMessage());
 		holder.message.setText(message.getMessage());
 		
 		LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();

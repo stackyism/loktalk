@@ -37,17 +37,6 @@ public class Message1 {
 		this.isStatusMessage = false;
 		return;
 	}
-	/**
-	 * Constructor to make a status Message object
-	 * consider the parameters are swaped from default Message constructor,
-	 *  not a good approach but have to go with it.
-	 */
-	public Message1(boolean status, String message) {
-		super();
-		this.message = message;
-		this.isMine = false;
-		this.isStatusMessage = status;
-	}
 	public String getMessage() {
 		return message;
 	}
