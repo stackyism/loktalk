@@ -43,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.support.v4.app.TaskStackBuilder;
 
 
 public class MainActivity extends ActionBarActivity implements dataTransfertoActivityInterface{
@@ -430,15 +431,25 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 					Fragment frag=getSupportFragmentManager().findFragmentByTag("postGen");
 					context = getApplicationContext();
 					myIntent = getIntent();
-					PendingIntent pendingIntent = PendingIntent.getActivity(
-						      context.getApplicationContext(), 
-						      0, 
-						      myIntent, 
-						      PendingIntent.FLAG_ONE_SHOT);
+					if(messageNumber ==0){
+						NotificationBuilder chatRequest = new NotificationBuilder(1,"New Message",parsedStr[2],"You have a message from "+parsedStr[1],context,myIntent);
+						chatRequest.NotifyNotification();
+					}
+					/*context = getApplicationContext();
+					myIntent = new Intent(context,MainActivity.class);
+					TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+					stackBuilder.addParentStack(MainActivity.class);
+					stackBuilder.addNextIntent(myIntent);
+					PendingIntent pendingIntent =
+					        stackBuilder.getPendingIntent(
+					            0,
+					            PendingIntent.FLAG_UPDATE_CURRENT
+					        );
+					
 					if(messageNumber ==0){
 						NotificationBuilder chatRequest = new NotificationBuilder(1,"New Message",parsedStr[2],"You have a message from "+parsedStr[1],context,pendingIntent);
 						chatRequest.NotifyNotification();
-					}
+					}*/
 					
 					
 					
