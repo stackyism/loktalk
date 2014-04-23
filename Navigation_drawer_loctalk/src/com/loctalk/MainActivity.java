@@ -5,21 +5,28 @@ import static com.loctalk.Constant.dbFunctions;
 import static com.loctalk.Constant.jsonFunctions1;
 import static com.loctalk.Constant.myAppID;
 import static com.loctalk.Constant.myNick;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 import com.loctalk.database.AppDB;
+
 import navigation.NavDrawerItem;
 import navigation.NavDrawerListAdapter;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.net.DhcpInfo;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.support.v4.app.TaskStackBuilder;
 
 
 public class MainActivity extends ActionBarActivity implements dataTransfertoActivityInterface{
@@ -58,6 +66,10 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	private NavDrawerListAdapter adapter;
 	receiver receiverthread;
 	sender senMain;
+	private Context context;
+	private Intent myIntent;
+	private static int messageNumber;
+	private static int chatNumber;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -382,7 +394,7 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 	    		 */
 
 				String[] parsedStr = jsonFunctions1.parseUltiJSON(recAr[0]);
-
+				System.out.println("0: "+parsedStr[0]+"  1:  "+parsedStr[1]+"  2:  "+parsedStr[2]);
 				if(parsedStr[3].equals("adReq")){
 
 				}
@@ -417,6 +429,30 @@ public class MainActivity extends ActionBarActivity implements dataTransfertoAct
 					String time=c.getTime().toString();
 					dbFunctions.addtopostdb(ID, parsedStr[0],msg.toString(), time, parsedStr[3]);
 					Fragment frag=getSupportFragmentManager().findFragmentByTag("postGen");
+					context = getApplicationContext();
+					myIntent = getIntent();
+					if(messageNumber ==0){
+						NotificationBuilder chatRequest = new NotificationBuilder(1,"New Message",parsedStr[2],"You have a message from "+parsedStr[1],context,myIntent);
+						chatRequest.NotifyNotification();
+					}
+					/*context = getApplicationContext();
+					myIntent = new Intent(context,MainActivity.class);
+					TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+					stackBuilder.addParentStack(MainActivity.class);
+					stackBuilder.addNextIntent(myIntent);
+					PendingIntent pendingIntent =
+					        stackBuilder.getPendingIntent(
+					            0,
+					            PendingIntent.FLAG_UPDATE_CURRENT
+					        );
+					
+					if(messageNumber ==0){
+						NotificationBuilder chatRequest = new NotificationBuilder(1,"New Message",parsedStr[2],"You have a message from "+parsedStr[1],context,pendingIntent);
+						chatRequest.NotifyNotification();
+					}*/
+					
+					
+					
 					if(frag.isVisible())
 					datatofragment.passdatatofragment("message",msg.toString());
 				}
